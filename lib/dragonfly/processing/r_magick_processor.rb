@@ -95,8 +95,8 @@ module Dragonfly
         image.to_blob
       end
       
-      def resize(temp_object, opts={})
-        rmagick_image(temp_object).change_geometry!(opts[:geometry]) do |cols, rows, img|
+      def resize(temp_object, geometry)
+        rmagick_image(temp_object).change_geometry!(geometry) do |cols, rows, img|
          img.resize!(cols, rows)
         end.to_blob
       end
