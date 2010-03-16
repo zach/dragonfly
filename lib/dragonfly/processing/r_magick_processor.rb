@@ -51,6 +51,12 @@ module Dragonfly
         '900'     => 900
       }
       
+      # Geometry string patterns
+      RESIZE_GEOMETRY         = /^\d*x\d*[><%^!]?$|^\d+@$/
+      CROPPED_RESIZE_GEOMETRY = /^(\d+)x(\d+)#(\w{1,2})?$/
+      CROP_GEOMETRY           = /^(\d+)x(\d+)([+-]\d+)([+-]\d+)(\w{1,2})?$/
+      THUMB_GEOMETRY = Regexp.union RESIZE_GEOMETRY, CROPPED_RESIZE_GEOMETRY, CROP_GEOMETRY
+      
       # HashWithCssStyleKeys is solely for being able to access a hash
       # which has css-style keys (e.g. 'font-size') with the underscore
       # symbol version
@@ -122,6 +128,24 @@ module Dragonfly
           rotated_image ? rotated_image.to_blob : temp_object
         else
           temp_object
+        end
+      end
+      
+      def thumb(temp_object, geometry)
+        case geometry
+        when RESIZE_GEOMETRY
+          resize(temp_object, geometry)
+        when CROPPED_RESIZE_GEOMETRY
+          resize_and_crop(temp_object, :width => $1, :height => $2, :gravity => $3)
+        when CROP_GEOMETRY
+          crop(temp_object,
+            :width => $1,
+            :height => $2,
+            :x => $3,
+            :y => $4,
+            :gravity => $5
+          )
+        else raise ArgumentError, "Didn't recognise the geometry string #{geometry}"
         end
       end
       
