@@ -73,7 +73,7 @@ module Dragonfly
       @analysers, @processors, @encoders = AnalyserList.new, ProcessorList.new, EncoderList.new
       @job_manager = JobManager.new
       @parameters_class = Class.new(Parameters)
-      @url_handler = UrlHandler.new(@parameters_class)
+      @url_handler = UrlHandler.new
       initialize_temp_object_class
     end
     
