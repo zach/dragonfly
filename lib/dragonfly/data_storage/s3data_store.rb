@@ -25,7 +25,8 @@ module Dragonfly
       def store(temp_object)
         uid = generate_uid(temp_object.basename || 'file')
         ensure_initialized
-        AWS::S3::S3Object.store(uid, temp_object.file, bucket_name)
+        AWS::S3::S3Object.store(uid, temp_object.file.open, bucket_name)
+        temp_object.file.close
         uid
       end
 

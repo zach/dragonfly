@@ -60,12 +60,11 @@ module Dragonfly
       if @tempfile
         @tempfile
       elsif initialized_tempfile
-        initialized_tempfile.open
         @tempfile = initialized_tempfile
       elsif initialized_data
         tempfile = Tempfile.new('dragonfly')
         tempfile.write(initialized_data)
-        tempfile.open
+        tempfile.close
         @tempfile = tempfile
       elsif initialized_file
         @tempfile = copy_to_tempfile(initialized_file)
@@ -160,6 +159,7 @@ module Dragonfly
     
     def copy_to_tempfile(file)
       tempfile = Tempfile.new('dragonfly')
+      tempfile.close
       FileUtils.cp File.expand_path(file.path), tempfile.path
       tempfile
     end

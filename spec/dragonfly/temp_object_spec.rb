@@ -73,12 +73,12 @@ describe Dragonfly::TempObject do
       end
     end
     describe "file" do
-      it "should lazily create an unclosed tempfile" do
+      it "should lazily create a closed tempfile" do
         @temp_object.file.should be_a(Tempfile)
-        @temp_object.file.should_not be_closed
+        @temp_object.file.should be_closed
       end
       it "should contain the correct data" do
-        @temp_object.file.read.should == @gif_string
+        @temp_object.file.open.read.should == @gif_string
       end
     end
     describe "each" do
@@ -131,12 +131,12 @@ describe Dragonfly::TempObject do
       end
     end
     describe "file" do
-      it "should lazily return an unclosed tempfile" do
+      it "should lazily return a closed tempfile" do
         @temp_object.file.should be_a(Tempfile)
-        @temp_object.file.should_not be_closed
+        @temp_object.file.should be_closed
       end
       it "should contain the correct data" do
-        @temp_object.file.read.should == @file.read
+        @temp_object.file.open.read.should == @file.read
       end
     end
     describe "each" do
